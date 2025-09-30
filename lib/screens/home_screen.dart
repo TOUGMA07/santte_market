@@ -1,38 +1,28 @@
-// Import des packages nécessaires
 import 'package:flutter/material.dart';
+import 'products_screen.dart'; // Import de notre nouvel écran
+import 'cart_screen.dart';     // Import de l'écran panier
 
-// Notre classe principale pour l'écran d'accueil
 class HomeScreen extends StatelessWidget {
-  // Constructeur de la classe
   const HomeScreen({super.key});
 
-  // Méthode build qui décrit comment l'écran doit être affiché
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Barre d'en-tête de l'application
       appBar: AppBar(
         title: const Text('Santé Market 🏥'),
         backgroundColor: Colors.blue[700],
         foregroundColor: Colors.white,
       ),
-      
-      // Corps principal de l'écran
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Icône médicale
             const Icon(
               Icons.medical_services,
               size: 100,
               color: Colors.blue,
             ),
-            
-            // Espacement
             const SizedBox(height: 20),
-            
-            // Titre principal
             const Text(
               'Bienvenue sur Santé Market',
               style: TextStyle(
@@ -41,39 +31,46 @@ class HomeScreen extends StatelessWidget {
                 color: Colors.blue,
               ),
             ),
-            
-            // Espacement
             const SizedBox(height: 10),
-            
-            // Description
             const Text(
               'Votre marché pour les articles de santé',
               style: TextStyle(fontSize: 16),
               textAlign: TextAlign.center,
             ),
-            
-            // Espacement
             const SizedBox(height: 30),
             
-            // Premier bouton
+            // BOUTON MODIFIÉ - Maintenant il navigue vers ProductsScreen
             ElevatedButton(
               onPressed: () {
-                // Action quand on clique sur le bouton
-                print('Bouton Voir les produits cliqué !');
+                // Navigation vers l'écran des produits
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProductsScreen(),
+                  ),
+                );
               },
               child: const Text('Voir les produits'),
             ),
             
-            // Espacement
             const SizedBox(height: 10),
             
-            // Deuxième bouton
-            OutlinedButton(
+            // NOUVEAU BOUTON - Va vers le panier
+            ElevatedButton(
               onPressed: () {
-                // Action quand on clique sur le bouton
-                print('Bouton Vendre un article cliqué !');
+                // Navigation vers l'écran du panier
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CartScreen(),
+                  ),
+                );
               },
-              child: const Text('Vendre un article'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('Voir mon panier'),
             ),
           ],
         ),
@@ -81,16 +78,8 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-// import : Importe les fonctionnalités Flutter nécessaires
+// Navigator.push() : Ajoute un nouvel écran par-dessus l'actuel
 
-// class HomeScreen : Définit notre écran comme une classe
+// MaterialPageRoute : Crée une transition fluide entre les écrans
 
-// build() : Méthode qui construit l'interface
-
-// Scaffold : Structure de base d'un écran Flutter
-
-// AppBar : Barre en haut de l'écran
-
-// Column : Dispose les éléments verticalement
-
-// ElevatedButton : Bouton avec effet de relief
+// builder : Construit l'écran de destination
