@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
+import '../models/cart_item.dart';
+import '../data/categories_data.dart';
 
 class ProductCard extends StatelessWidget {
-  final String name;
-  final String price;
-  final IconData icon;
-  final String description;
+  final CartItem product;
   final VoidCallback onAddToCart;
 
   const ProductCard({
     super.key,
-    required this.name,
-    required this.price,
-    required this.icon,
-    required this.description,
+    required this.product,
     required this.onAddToCart,
   });
 
   @override
   Widget build(BuildContext context) {
+    final category = CategoriesData.getCategoryById(product.categoryId);
+    
     return Card(
       margin: const EdgeInsets.all(10),
       elevation: 5,
@@ -25,17 +23,17 @@ class ProductCard extends StatelessWidget {
         padding: const EdgeInsets.all(15),
         child: Row(
           children: [
-            // Icône du produit
+            // Icône du produit avec couleur de catégorie
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.green[50],
+                color: category.color.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
-                icon,
+                category.icon,
                 size: 40,
-                color: Colors.green,
+                color: category.color,
               ),
             ),
             const SizedBox(width: 15),
@@ -45,7 +43,7 @@ class ProductCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    name,
+                    product.name,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -53,15 +51,16 @@ class ProductCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    description,
+                    category.name,
                     style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
+                      fontSize: 12,
+                      color: category.color,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    price,
+                    '${product.price.toStringAsFixed(2)} €',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
