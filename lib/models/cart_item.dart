@@ -4,6 +4,7 @@ class CartItem {
   final double price;
   final int quantity;
   final String image;
+  final String categoryId; // Nouveau champ
 
   CartItem({
     required this.id,
@@ -11,6 +12,7 @@ class CartItem {
     required this.price,
     required this.quantity,
     required this.image,
+    required this.categoryId, // Ajouté
   });
 
   // Getter pour le prix total de cet article
@@ -24,6 +26,7 @@ class CartItem {
       price: price,
       quantity: quantity ?? this.quantity,
       image: image,
+      categoryId: categoryId, // Ajouté
     );
   }
 }
