@@ -42,3 +42,4 @@ class CategoriesScreen extends StatelessWidget {
     );
   }
 }
+ 
