@@ -2,47 +2,40 @@ import 'package:flutter/material.dart';
 import '../models/cart_item.dart';
 
 class CartService extends ChangeNotifier {
-  // Liste des articles dans le panier
   List<CartItem> _items = [];
 
   List<CartItem> get items => _items;
 
-  // Nombre total d'articles
   int get itemCount => _items.fold(0, (sum, item) => sum + item.quantity);
 
-  // Prix total du panier
-  double get totalPrice =>
-      _items.fold(0, (sum, item) => sum + item.totalPrice);
+  double get totalPrice => _items.fold(0, (sum, item) => sum + item.totalPrice);
 
-  // Ajouter un article au panier
-  void addItem(String productId, String name, double price, String image) {
+  // MÉTHODE MODIFIÉE : Ajout du paramètre categoryId
+  void addItem(String productId, String name, double price, String image, String categoryId) {
     final existingIndex = _items.indexWhere((item) => item.id == productId);
     
     if (existingIndex >= 0) {
-      // Article déjà présent, on augmente la quantité
       _items[existingIndex] = _items[existingIndex].copyWith(
         quantity: _items[existingIndex].quantity + 1,
       );
     } else {
-      // Nouvel article
       _items.add(CartItem(
         id: productId,
         name: name,
         price: price,
         quantity: 1,
         image: image,
+        categoryId: categoryId, // Ajouté
       ));
     }
     notifyListeners();
   }
 
-  // Supprimer un article du panier
   void removeItem(String productId) {
     _items.removeWhere((item) => item.id == productId);
     notifyListeners();
   }
 
-  // Modifier la quantité d'un article
   void updateQuantity(String productId, int newQuantity) {
     if (newQuantity <= 0) {
       removeItem(productId);
@@ -58,9 +51,22 @@ class CartService extends ChangeNotifier {
     }
   }
 
-  // Vider tout le panier
   void clearCart() {
     _items.clear();
     notifyListeners();
+  }
+
+  // NOUVELLE MÉTHODE : Obtenir les articles groupés par catégorie
+  Map<String, List<CartItem>> getItemsGroupedByCategory() {
+    final Map<String, List<CartItem>> grouped = {};
+    
+    for (final item in _items) {
+      if (!grouped.containsKey(item.categoryId)) {
+        grouped[item.categoryId] = [];
+      }
+      grouped[item.categoryId]!.add(item);
+    }
+    
+    return grouped;
   }
 }
