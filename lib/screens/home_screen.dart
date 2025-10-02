@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'products_screen.dart'; // Import de notre nouvel écran
-import 'cart_screen.dart';     // Import de l'écran panier
+import 'categories_screen.dart'; // Changement ici
+import 'cart_screen.dart';
+import '../data/categories_data.dart'; // Import ajouté
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -13,16 +14,12 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.blue[700],
         foregroundColor: Colors.white,
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(
-              Icons.medical_services,
-              size: 100,
-              color: Colors.blue,
-            ),
-            const SizedBox(height: 20),
+            // Message de bienvenue
             const Text(
               'Bienvenue sur Santé Market',
               style: TextStyle(
@@ -33,53 +30,94 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             const Text(
-              'Votre marché pour les articles de santé',
+              'Votre marché professionnel pour les articles de santé',
               style: TextStyle(fontSize: 16),
-              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 30),
             
-            // BOUTON MODIFIÉ - Maintenant il navigue vers ProductsScreen
-            ElevatedButton(
-              onPressed: () {
-                // Navigation vers l'écran des produits
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ProductsScreen(),
-                  ),
-                );
-              },
-              child: const Text('Voir les produits'),
-            ),
+            // Statistiques rapides
+            _buildStatsCard(context),
+            const SizedBox(height: 20),
             
-            const SizedBox(height: 10),
-            
-            // NOUVEAU BOUTON - Va vers le panier
-            ElevatedButton(
-              onPressed: () {
-                // Navigation vers l'écran du panier
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CartScreen(),
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange,
-                foregroundColor: Colors.white,
+            // Accès rapide aux catégories
+            const Text(
+              'Catégories principales',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
-              child: const Text('Voir mon panier'),
             ),
+            const SizedBox(height: 10),
+            _buildQuickCategories(context),
           ],
         ),
       ),
     );
   }
+
+  Widget _buildStatsCard(BuildContext context) {
+    return Card(
+      elevation: 3,
+      color: Colors.blue[50],
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildStatItem(Icons.category, '${CategoriesData.categories.length}', 'Catégories'),
+            _buildStatItem(Icons.medical_services, '20', 'Produits'),
+            _buildStatItem(Icons.local_hospital, '5', 'Fournisseurs'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatItem(IconData icon, String value, String label) {
+    return Column(
+      children: [
+        Icon(icon, color: Colors.blue, size: 30),
+        const SizedBox(height: 5),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 12),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildQuickCategories(BuildContext context) {
+    // Prendre les 3 premières catégories pour l'accueil
+    final quickCategories = CategoriesData.categories.take(3).toList();
+    
+    return Column(
+      children: quickCategories.map((category) {
+        return Card(
+          margin: const EdgeInsets.only(bottom: 10),
+          child: ListTile(
+            leading: Icon(category.icon, color: category.color),
+            title: Text(category.name),
+            subtitle: Text(category.description),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            onTap: () {
+              // Navigation vers les catégories (l'utilisateur pourra ensuite choisir)
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CategoriesScreen(),
+                ),
+              );
+            },
+          ),
+        );
+      }).toList(),
+    );
+  }
 }
-// Navigator.push() : Ajoute un nouvel écran par-dessus l'actuel
-
-// MaterialPageRoute : Crée une transition fluide entre les écrans
-
-// builder : Construit l'écran de destination
