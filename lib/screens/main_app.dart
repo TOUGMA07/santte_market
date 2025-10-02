@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // Import ajouté
+import 'package:provider/provider.dart';
 import 'home_screen.dart';
-import 'products_screen.dart';
+import 'categories_screen.dart'; // REMPLACE ProductsScreen
 import 'cart_screen.dart';
 import 'profile_screen.dart';
-import '../services/cart_service.dart'; // Import ajouté
+import '../services/cart_service.dart';
+import '../data/products_data.dart'; // Import ajouté
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
@@ -18,7 +19,7 @@ class _MainAppState extends State<MainApp> {
 
   final List<Widget> _screens = [
     const HomeScreen(),
-    const ProductsScreen(),
+    const CategoriesScreen(), // REMPLACÉ : Au lieu de ProductsScreen
     const CartScreen(),
     const ProfileScreen(),
   ];
@@ -47,8 +48,8 @@ class _MainAppState extends State<MainApp> {
             label: 'Accueil',
           ),
           const BottomNavigationBarItem(
-            icon: Icon(Icons.medical_services),
-            label: 'Produits',
+            icon: Icon(Icons.category),
+            label: 'Catégories', // CHANGÉ : Au lieu de "Produits"
           ),
           BottomNavigationBarItem(
             icon: Stack(
@@ -90,4 +91,4 @@ class _MainAppState extends State<MainApp> {
       ),
     );
   }
-}  
+}
